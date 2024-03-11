@@ -120,7 +120,7 @@ def train_model(model_type, train_data, train_corpus, epochs, batch_size = 16, l
 def test_model(model_type, test_data, train_corpus, batch_size = 16):
 
     model_type = model_type.upper()
-    testloader = load_test_dataloader(test_data, train_corpus, batch_size)
+    testloader = load_test_dataloader(test_data.copy(), train_corpus, batch_size)
     
     vocab_size = len(train_corpus)
     model = load_modeltype(model_type, vocab_size)
@@ -147,4 +147,5 @@ def test_model(model_type, test_data, train_corpus, batch_size = 16):
         corrval += (preds == labels).sum().item()
         totval += 16
 
-    print(f"The test accuacy is: {corrval/totval}")
+    print(f"The test accuracy for {model_type} is: {corrval/totval}")
+    return corrval/totval
