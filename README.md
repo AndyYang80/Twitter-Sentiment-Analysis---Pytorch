@@ -37,4 +37,8 @@ The following table details the model accuracy on the testing dataset for the be
 
 ## Usage
 
-To use the repository, first clone the repository. Then, see the `main.ipnyb` file to see examples of training, testing, and predicting using the model
+To use the repository:
+
+1. Clone the repository using `https://github.com/AndyYang80/Twitter-Sentiment-Analysis-Pytorch.git`
+2. Download the data from the [kaggle data repository](https://www.kaggle.com/datasets/jp797498e/twitter-entity-sentiment-analysis/data) and store the data files in the root project directory
+3. See the `main.ipnyb` file to see examples of training, testing, and predicting using each model
