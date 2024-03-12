@@ -79,23 +79,3 @@ def tokenize(df, tweet_corpus, max_len):
 def acc(pred,label):
     pred = torch.round(pred.squeeze())
     return torch.sum(pred == label.squeeze()).item()
-
-def predict(sentence, model, tweet_corpus, max_len):
-    sentence = sentence.lower()
-    words = sentence.split(" ")
-    corpus_dict = corpora.Dictionary([tweet_corpus]).token2id
-    tokens = [corpus_dict[x] for x in words if x in corpus_dict]
-    if len(tokens) <= 1:
-        print("No Valid Strings!")
-        return None
-    else:
-        tokens = np.array(tokens)
-
-    if len(tokens) < max_len:
-        tokens = np.append(tokens, [0]*(max_len - len(tokens)))
-        tokens = tokens[0:max_len]
-    
-    tokens = torch.LongTensor(tokens[None, :])
-    output = model(tokens)
-    preds = torch.argmax(output, 1)
-    return preds

@@ -149,3 +149,40 @@ def test_model(model_type, test_data, train_corpus, batch_size = 16):
 
     print(f"The test accuracy for {model_type} is: {corrval/totval}")
     return corrval/totval
+
+def predict(sentence, model_type, tweet_corpus):
+
+    max_len = 35
+    model_type = model_type.upper()
+    model = load_modeltype(model_type, len(tweet_corpus))
+
+    modelload = {
+        "CNN" : 'working/CNN/state_dict.pt',
+        "RNN" : 'working/RNN/state_dict.pt',
+        "LSTM" : 'working/LSTM/state_dict.pt'
+    }
+
+    model.load_state_dict(torch.load(modelload[model_type]))
+    model.to(device)
+    
+    sentence = sentence.lower()
+    words = sentence.split(" ")
+    corpus_dict = corpora.Dictionary([tweet_corpus]).token2id
+    tokens = [corpus_dict[x] for x in words if x in corpus_dict]
+    if len(tokens) <= 1:
+        print("No Valid Strings were detected in your sentence!")
+        return None
+    else:
+        tokens = np.array(tokens)
+
+    if len(tokens) < max_len:
+        tokens = np.append(tokens, [0]*(max_len - len(tokens)))
+        tokens = tokens[0:max_len]
+    
+    tokens = torch.LongTensor(tokens[None, :]).to(device)
+    output = model(tokens)
+    preds = torch.argmax(output, 1).item()
+
+    preddict = {0: "Negative", 1 : "Positive", 2 : "Neutral", 3 : "Irrelevant"}
+
+    print(f"The predicted sentiment is: {preddict[preds]}")
